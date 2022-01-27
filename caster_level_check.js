@@ -214,7 +214,7 @@ if (selectedActorData.data.attributes.spells.spellbooks.tertiary.cl.total > 0) {
 
 if (selectedActorData.data.attributes.spells.spellbooks.spelllike.cl.total > 0) {
   spellbookButtons["button"+buttonNum] = {
-    label: selectedActorData.data.attributes.spells.spellbooks.spelllike.name+": "+toTitleCase(selectedActorData.data.attributes.spells.spellbooks.spelllike.class),
+    label: selectedActorData.data.attributes.spells.spellbooks.spelllike.name,
     callback: (actor, spellbook) => callbackCasterLevelCheckFirstDialog(selectedActorData, "spelllike") }
   passthru_spellbook = "spelllike"
   buttonNum++
