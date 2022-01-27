@@ -34,7 +34,7 @@ console.log(selectedActorData)
 
 // At this point we have verified that only one token is selected, and we have retrieved its actor data!
 
-// The following is just a utility function to convert a string into Title Case format
+// The following are just a utility functions to convert a string into Title Case format
 function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,
@@ -42,6 +42,9 @@ function toTitleCase(str) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     }
   );
+}
+function camelToTitleCase(str) {
+  return toTitleCase(str.replace(/([A-Z])/g," $1"));
 }
 
 // The following callback function will actually roll the Caster Level Check in the Chat panel
@@ -68,7 +71,7 @@ function callbackCasterLevelCheckSecondDialog(actor, sbName, clName, cl, takeTen
     clc_mod_t += " + "+html.find('[name="portal-sensitive"]')[0].value
   }
   let sit_t = ""
-  if (html & html.find() && (html.find('[name="situational-bonus"]')[0].value != "")) {
+  if (html && (html.find('[name="situational-bonus"]').length > 0) && (html.find('[name="situational-bonus"]')[0].value !== "")) {
     sit_t += " + "+html.find('[name="situational-bonus"]')[0].value
   }
   let roll = new Roll("@d + @cl@mod@sit",{d:die_t, cl: cl, mod: clc_mod_t, sit: sit_t}).evaluate({async:false});
@@ -82,7 +85,7 @@ function callbackCasterLevelCheckSecondDialog(actor, sbName, clName, cl, takeTen
 // The following callback function will process the actor to find any pertinant info for the CL check
 function callbackCasterLevelCheckFirstDialog(actor, spellbook) {
   let spellbookName = actor.data.attributes.spells.spellbooks[spellbook].name
-  let dndClass      = toTitleCase(actor.data.attributes.spells.spellbooks[spellbook].class)
+  let dndClass      = camelToTitleCase(actor.data.attributes.spells.spellbooks[spellbook].class)
   let casterLevel   = actor.data.attributes.spells.spellbooks[spellbook].cl.total
 
   // Find items that have featSpellPenetrationBonus set.
@@ -190,7 +193,7 @@ let passthru_spellbook = null
 
 if (selectedActorData.data.attributes.spells.spellbooks.primary.cl.total > 0) {
   spellbookButtons["button"+buttonNum] = {
-    label: selectedActorData.data.attributes.spells.spellbooks.primary.name+": "+toTitleCase(selectedActorData.data.attributes.spells.spellbooks.primary.class),
+    label: camelToTitleCase(selectedActorData.data.attributes.spells.spellbooks.primary.class),
     callback: (actor, spellbook) => callbackCasterLevelCheckFirstDialog(selectedActorData, "primary") }
   passthru_spellbook = "primary"
   buttonNum++
@@ -198,7 +201,7 @@ if (selectedActorData.data.attributes.spells.spellbooks.primary.cl.total > 0) {
 
 if (selectedActorData.data.attributes.spells.spellbooks.secondary.cl.total > 0) {
   spellbookButtons["button"+buttonNum] = {
-    label: selectedActorData.data.attributes.spells.spellbooks.secondary.name+": "+toTitleCase(selectedActorData.data.attributes.spells.spellbooks.secondary.class),
+    label: camelToTitleCase(selectedActorData.data.attributes.spells.spellbooks.secondary.class),
     callback: (actor, spellbook) => callbackCasterLevelCheckFirstDialog(selectedActorData, "secondary") }
   passthru_spellbook = "secondary"
   buttonNum++
@@ -206,7 +209,7 @@ if (selectedActorData.data.attributes.spells.spellbooks.secondary.cl.total > 0) 
 
 if (selectedActorData.data.attributes.spells.spellbooks.tertiary.cl.total > 0) {
   spellbookButtons["button"+buttonNum] = {
-    label: selectedActorData.data.attributes.spells.spellbooks.tertiary.name+": "+toTitleCase(selectedActorData.data.attributes.spells.spellbooks.tertiary.class),
+    label: camelToTitleCase(selectedActorData.data.attributes.spells.spellbooks.tertiary.class),
     callback: (actor, spellbook) => callbackCasterLevelCheckFirstDialog(selectedActorData, "tertiary") }
   passthru_spellbook = "tertiary"
   buttonNum++
